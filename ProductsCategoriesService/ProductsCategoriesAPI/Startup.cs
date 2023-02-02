@@ -18,6 +18,18 @@ namespace ProductsCategoriesAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000", "https://localhost:5001")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .WithExposedHeaders("Content-Disposition");
+                });
+            });
+
             services.AddControllers();
             
             services.AddApiVersioning(opt => {
@@ -37,6 +49,7 @@ namespace ProductsCategoriesAPI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
+            app.UseCors();
             app.UseEndpoints(builder => builder.MapControllers());
         }
     }
